@@ -80,8 +80,15 @@ export default class EditControl extends LayersControl {
   }
   render () {
     const {children} = this.props
-    var childrenWithProps = React.Children.map(children, child =>
-      React.cloneElement(child, { drawControl: this.state.drawControl }))
+    const n_childern = _.size(children)
+    var childrenWithProps = React.Children.map(children, (child, index) => {
+      return React.cloneElement(child, {
+        drawControl: this.state.drawControl,
+        first: index === 0,
+        last: index === n_childern - 1,
+      })
+    })
+
     return <div>{childrenWithProps}</div>
   }
 }

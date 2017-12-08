@@ -12,6 +12,12 @@ export default class DrawPolygonBtn extends MapControl {
     super()
     this.onClick = this.onClick.bind(this)
   }
+
+  getFirstLastElementClass () {
+    const { last, first } = this.props
+    return last ? 'last' : first ? 'first' : ''
+  }
+
   componentWillMount() {
     const centerControl = L.control({position: 'topright'})
     const jsx = (
@@ -20,8 +26,8 @@ export default class DrawPolygonBtn extends MapControl {
       </div>
     )
 
-    centerControl.onAdd = function (map) {
-      let div = L.DomUtil.create('div', '')
+    centerControl.onAdd = (map) => {
+      let div = L.DomUtil.create('div', `leaflet-bar leaflet-control leaflet-draw-btn ${this.getFirstLastElementClass()}`)
       ReactDOM.render(jsx, div)
       return div
     }

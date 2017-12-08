@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import L from 'leaflet'
 import { MapControl } from 'react-leaflet'
 
-export default class DrawPolylineBtn extends MapControl {
+export default class DrawCircleBtn extends MapControl {
   static contextTypes = {
     map: PropTypes.instanceOf(Map),
   }
@@ -12,22 +12,20 @@ export default class DrawPolylineBtn extends MapControl {
     super()
     this.onClick = this.onClick.bind(this)
   }
-
   getFirstLastElementClass () {
     const { last, first } = this.props
     return last ? 'last' : first ? 'first' : ''
   }
-
   componentWillMount() {
     const centerControl = L.control({position: 'topright'})
     const jsx = (
       <div {...this.props} onClick={this.onClick} style={{width: 30, height: 30, backgroundColor: '#FFF', cursor: 'pointer'}}>
-        <img src='style/images/polyline.png' />
+        <img src='style/images/circle.png' />
       </div>
     )
 
     centerControl.onAdd = (map) => {
-      let div = L.DomUtil.create('div', `leaflet-bar leaflet-control leaflet-draw-btn ${this.getFirstLastElementClass()}`)
+      let div = L.DomUtil.create('div', `leaflet-bar leaflet-control leaflet-control-custom leaflet-draw-btn ${this.getFirstLastElementClass()}`)
       ReactDOM.render(jsx, div)
       return div
     }
@@ -36,6 +34,6 @@ export default class DrawPolylineBtn extends MapControl {
   onClick() {
     const { map } = this.context
     const { drawControl } = this.props
-    new L.Draw.Polyline(map, drawControl.options.polyline).enable()
+    new L.Draw.Circle(map, drawControl.options.circle).enable()
   }
 }
