@@ -1,10 +1,10 @@
-import { PropTypes } from 'prop-types';
-import Draw from 'leaflet-draw'; // eslint-disable-line
-import _ from 'lodash';
+import { PropTypes } from 'prop-types'
+import React from 'react'
+import Draw from 'leaflet-draw' // eslint-disable-line
+import _ from 'lodash'
 
-import { LayersControl } from 'react-leaflet';
-import { Map } from 'leaflet';
-import drawLineBtn from './mapButtons/drawLineBtn'
+import { LayersControl } from 'react-leaflet'
+import { Map } from 'leaflet'
 
 const eventHandlers = {
   onEdited: 'draw:edited',
@@ -19,7 +19,7 @@ const eventHandlers = {
   onDeleted: 'draw:deleted',
   onDeleteStart: 'draw:deletestart',
   onDeleteStop: 'draw:deletestop',
-};
+}
 
 export default class EditControl extends LayersControl {
   static contextTypes = {
@@ -28,23 +28,30 @@ export default class EditControl extends LayersControl {
       addLayer: PropTypes.func.isRequired,
       removeLayer: PropTypes.func.isRequired
     })
-  };
+  }
+
+  constructor() {
+    super()
+    this.state = {
+      drawControl: null,
+    }
+  }
 
   onDrawCreate = (e) => {
-    const { onCreated } = this.props;
-    const { layerContainer } = this.context;
+    const { onCreated } = this.props
+    const { layerContainer } = this.context
 
-    layerContainer.addLayer(e.layer);
-    onCreated && onCreated(e);
-  };
+    layerContainer.addLayer(e.layer)
+    onCreated && onCreated(e)
+  }
 
   componentWillMount() {
-    const { map } = this.context;
-    this.updateDrawControls();
-    map.on('draw:created', this.onDrawCreate);
+    const { map } = this.context
+    this.updateDrawControls()
+    map.on('draw:created', this.onDrawCreate)
     for (const key in eventHandlers) {
       if (this.props[key]) {
-        map.on(eventHandlers[key], this.props[key]);
+        map.on(eventHandlers[key], this.props[key])
       }
     }
   }
@@ -52,22 +59,29 @@ export default class EditControl extends LayersControl {
 
   componentDidUpdate(prevProps) {
     // super updates positions if thats all that changed so call this first
-    super.componentDidUpdate(prevProps);
-    this.updateDrawControls();
+    super.componentDidUpdate(prevProps)
+    this.updateDrawControls()
 
-    return null;
+    return null
   }
 
   updateDrawControls = () => {
-    const { map, layerContainer } = this.context;
-    map.addLayer(layerContainer);
+    const { map, layerContainer } = this.context
+    map.addLayer(layerContainer)
     var drawControl = new L.Control.Draw({
         edit: {
             featureGroup: layerContainer
         }
-    });
-    map.addControl(new drawLineBtn({layerContainer, drawControl}));
-    map.addControl(new drawLineBtn({layerContainer, drawControl}));
-    map.addControl(drawControl);
-  };
+    })
+    // map.addControl(new drawLineBtn({drawControl}))
+    // map.addControl(<DrawPolygonBtn drawControl={drawControl} />)
+    // map.addControl(drawControl)
+    this.setState({drawControl})
+  }
+  render () {
+    const {children} = this.props
+    var childrenWithProps = React.Children.map(children, child =>
+      React.cloneElement(child, { drawControl: this.state.drawControl }))
+    return <div>{childrenWithProps}</div>
+  }
 }

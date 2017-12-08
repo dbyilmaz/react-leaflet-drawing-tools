@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import Map from './map'
 export default class App extends Component {
   render() {
@@ -6,6 +6,6 @@ export default class App extends Component {
       <div>
         <Map />
       </div>
-    );
+    )
   }
 }

@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { render } from 'react-dom'
 import { Map, TileLayer, FeatureGroup, Circle } from 'react-leaflet'
 import EditControl from './EditControl'
-
+import DrawPolylineBtn  from './mapButtons/drawPolylineBtn'
+import DrawPolygonBtn  from './mapButtons/drawPolygonBtn'
 import { MAP_URL_DEFAULT } from './constants'
 
 const styles = {
@@ -55,7 +56,10 @@ export default class MyMap extends Component {
           onCreated={this._onCreate}
           onDeleted={this._onDeleted}
           onDrawStop={this._onDrawStop}
-        />
+        >
+          <DrawPolylineBtn />
+          <DrawPolygonBtn />
+        </EditControl>
       </FeatureGroup>
     )
   }
