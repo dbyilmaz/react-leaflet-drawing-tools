@@ -5,6 +5,7 @@ import EditControl from './EditControl'
 import DrawPolylineBtn  from './mapButtons/drawPolylineBtn'
 import DrawPolygonBtn  from './mapButtons/drawPolygonBtn'
 import DrawCircleBtn from './mapButtons/drawCircleBtn'
+import DeleteBtn from './mapButtons/deleteBtn'
 import { MAP_URL_DEFAULT } from './constants'
 
 const styles = {
@@ -61,6 +62,7 @@ export default class MyMap extends Component {
           <DrawPolylineBtn />
           <DrawPolygonBtn />
           <DrawCircleBtn />
+          <DeleteBtn />
         </EditControl>
       </FeatureGroup>
     )
