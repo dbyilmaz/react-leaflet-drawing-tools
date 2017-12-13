@@ -8,6 +8,7 @@ import DrawCircleBtn from './mapButtons/drawCircleBtn'
 import DeleteBtn from './mapButtons/deleteBtn'
 import CutBtn from './mapButtons/cutBtn'
 import DrawPolygonInBoundary  from './mapButtons/drawPolygonInBoundary'
+import EditBtn from './mapButtons/editBtn'
 import { MAP_URL_DEFAULT } from './constants'
 
 const styles = {
@@ -59,6 +60,7 @@ export default class MyMap extends Component {
           <DeleteBtn />
           <CutBtn />
           <DrawPolygonInBoundary />
+          <EditBtn />
         </EditControl>
       </FeatureGroup>
     )
