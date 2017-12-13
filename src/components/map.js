@@ -6,6 +6,8 @@ import DrawPolylineBtn  from './mapButtons/drawPolylineBtn'
 import DrawPolygonBtn  from './mapButtons/drawPolygonBtn'
 import DrawCircleBtn from './mapButtons/drawCircleBtn'
 import DeleteBtn from './mapButtons/deleteBtn'
+import CutBtn from './mapButtons/cutBtn'
+import DrawPolygonInBoundary  from './mapButtons/drawPolygonInBoundary'
 import { MAP_URL_DEFAULT } from './constants'
 
 const styles = {
@@ -41,14 +43,6 @@ export default class MyMap extends Component {
     console.log('d: ', d)
   }
 
-  _onDrawStop(a,b,c,d) {
-    console.log('_onDrawStop')
-    console.log('a: ', a)
-    console.log('b: ', b)
-    console.log('c: ', c)
-    console.log('d: ', d)
-  }
-
   renderDraw() {
     return (
       <FeatureGroup>
@@ -57,12 +51,14 @@ export default class MyMap extends Component {
           onEdited={this._onEditPath}
           onCreated={this._onCreate}
           onDeleted={this._onDeleted}
-          onDrawStop={this._onDrawStop}
+
         >
           <DrawPolylineBtn />
           <DrawPolygonBtn />
           <DrawCircleBtn />
           <DeleteBtn />
+          <CutBtn />
+          <DrawPolygonInBoundary />
         </EditControl>
       </FeatureGroup>
     )

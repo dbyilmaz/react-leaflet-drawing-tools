@@ -34,13 +34,13 @@ export default class EditControl extends LayersControl {
     super()
     this.state = {
       drawControl: null,
+      features: [],
     }
   }
 
   onDrawCreate = (e) => {
     const { onCreated } = this.props
     const { layerContainer } = this.context
-
     layerContainer.addLayer(e.layer)
     onCreated && onCreated(e)
   }

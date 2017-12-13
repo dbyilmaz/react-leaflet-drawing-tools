@@ -19,9 +19,9 @@ export default class DeleteBtn extends MapControl {
   componentWillMount() {
     const centerControl = L.control({position: 'topright'})
     const jsx = (
-      <div {...this.props} onClick={this.onClick} style={{width: 30, height: 30, backgroundColor: '#FFF', cursor: 'pointer'}}>
-        <img src='style/images/delete.png' />
-      </div>
+        <div {...this.props} onClick={this.onClick} style={{width: 30, height: 30, backgroundColor: '#FFF', cursor: 'pointer'}}>
+          <img src='style/images/delete.png' />
+        </div>
     )
 
     centerControl.onAdd = (map) => {
@@ -32,11 +32,21 @@ export default class DeleteBtn extends MapControl {
     this.leafletElement = centerControl
   }
   onClick() {
-    debugger
     const { map } = this.context
+    debugger
     const { drawControl } = this.props
     new L.EditToolbar.Delete(map, {
                 featureGroup: drawControl.options.edit.featureGroup
             }).enable()
+
+    const jsx = (
+      <div {...this.props} style={{display: 'flex', position: 'absolute', bottom: 0}}>
+        <div>Accept</div>
+        <div>Cancel</div>
+      </div>
+    )
+    let div = L.DomUtil.create('div', '')
+    ReactDOM.render(jsx, div)
+    map.addLayer(div)
   }
 }
