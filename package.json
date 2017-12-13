@@ -26,14 +26,21 @@
     "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
+    "@turf/bbox": "^5.1.5",
+    "@turf/difference": "^5.1.5",
+    "@turf/helpers": "^5.1.5",
+    "@turf/inside": "^5.0.0",
     "babel-preset-stage-1": "^6.1.18",
+    "kdbush": "^1.0.1",
     "leaflet-draw": "^0.4.13",
     "lodash": "^3.10.1",
+    "rbush": "^2.0.1",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-leaflet-draw": "^0.18.0",
     "react-redux": "4.3.0",
     "react-router": "^2.0.1",
-    "redux": "^3.0.4"
+    "redux": "^3.0.4",
+    "rtree": "^1.4.2"
   }
 }
