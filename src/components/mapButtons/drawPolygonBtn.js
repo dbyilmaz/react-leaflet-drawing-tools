@@ -2,11 +2,17 @@ import React from 'react'
 import { PropTypes } from 'prop-types'
 import ReactDOM from 'react-dom'
 import L from 'leaflet'
+require('leaflet-snap')
+require('leaflet-geometryutil')
 import { MapControl } from 'react-leaflet'
 
 export default class DrawPolygonBtn extends MapControl {
   static contextTypes = {
     map: PropTypes.instanceOf(Map),
+    layerContainer: PropTypes.shape({
+      addLayer: PropTypes.func.isRequired,
+      removeLayer: PropTypes.func.isRequired
+    }),
   }
   constructor() {
     super()
@@ -34,8 +40,8 @@ export default class DrawPolygonBtn extends MapControl {
     this.leafletElement = centerControl
   }
   onClick() {
-    const { map } = this.context
+    const { map, layerContainer } = this.context
     const { drawControl } = this.props
-    new L.Draw.Polygon(map, drawControl.options.polygone).enable()
+    new L.Draw.Polygon(map, drawControl.options.draw.polygon).enable()
   }
 }

@@ -18,7 +18,7 @@ const styles = {
   },
   mapContainer: {
     width: '100%',
-    height: '800px',
+    height: '500px',
     position: 'relative',
     boxSizing: 'border-box',
   },

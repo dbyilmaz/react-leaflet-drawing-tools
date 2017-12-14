@@ -2,10 +2,36 @@ import { PropTypes } from 'prop-types'
 import React from 'react'
 import Draw from 'leaflet-draw' // eslint-disable-line
 import _ from 'lodash'
-
+require('leaflet-snap')
+require('leaflet-geometryutil')
 import { LayersControl } from 'react-leaflet'
 import { Map } from 'leaflet'
 
+const styles = {
+  editControl: {
+    width: '100%',
+    height: '100%',
+  },
+  controllContainer: (visible) => ({
+    width: '100%',
+    background: 'rgba(255,255,255,0.7)',
+    display: 'flex',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: visible ? 0 : -50,
+    zIndex: 800,
+    transition: 'bottom 0.4s ease-in-out',
+  }),
+  controlBtn: {
+    margin: 10,
+    padding: '5px 10px',
+    backgroundColor: '#0097D6',
+    color: 'white',
+    minWidth: 60,
+    textAlign: 'center',
+    cursor: 'pointer',
+  },
+}
 const eventHandlers = {
   onEdited: 'draw:edited',
   onDrawStart: 'draw:drawstart',
@@ -29,22 +55,39 @@ export default class EditControl extends LayersControl {
       removeLayer: PropTypes.func.isRequired
     })
   }
-
+  guideLayers = []
   constructor() {
     super()
     this.state = {
       drawControl: null,
       features: [],
+      visible: false,
     }
+    this.onEdit = this.onEdit.bind(this)
+    this.saveEditing = this.saveEditing.bind(this)
   }
 
+  saveEditing () {
+    const { layerContainer } = this.context
+    _.each(layerContainer._layers, (layer) => {
+      layer.options.editing || (layer.options.editing = {});
+      layer.editing.disable()
+    })
+    this.setState({visible: false})
+  }
   onDrawCreate = (e) => {
     const { onCreated } = this.props
-    const { layerContainer } = this.context
+    const { layerContainer, map } = this.context
+    const guides = _.values(layerContainer._layers)
+    debugger
     layerContainer.addLayer(e.layer)
     onCreated && onCreated(e)
   }
 
+  onEdit() {
+    console.log('here here')
+    this.setState({visible: true})
+  }
   componentWillMount() {
     const { map } = this.context
     this.updateDrawControls()
@@ -59,8 +102,8 @@ export default class EditControl extends LayersControl {
 
   componentDidUpdate(prevProps) {
     // super updates positions if thats all that changed so call this first
-    super.componentDidUpdate(prevProps)
-    this.updateDrawControls()
+    // super.componentDidUpdate(prevProps)
+    // this.updateDrawControls()
 
     return null
   }
@@ -70,7 +113,10 @@ export default class EditControl extends LayersControl {
     map.addLayer(layerContainer)
     var drawControl = new L.Control.Draw({
         edit: {
-            featureGroup: layerContainer
+            featureGroup: layerContainer,
+        },
+        draw: {
+
         }
     })
     // map.addControl(new drawLineBtn({drawControl}))
@@ -78,17 +124,39 @@ export default class EditControl extends LayersControl {
     // map.addControl(drawControl)
     this.setState({drawControl})
   }
-  render () {
+  renderChildern() {
     const {children} = this.props
     const n_childern = _.size(children)
-    var childrenWithProps = React.Children.map(children, (child, index) => {
+    return React.Children.map(children, (child, index) => {
       return React.cloneElement(child, {
         drawControl: this.state.drawControl,
+        guideLayers: this.state.guideLayers,
         first: index === 0,
         last: index === n_childern - 1,
+        onEdit: this.onEdit,
       })
     })
-
-    return <div>{childrenWithProps}</div>
+  }
+  renderEditControl () {
+    const { visible } = this.state
+    console.log('viisi', visible)
+    return (
+      <div style={styles.controllContainer(visible)}>
+        <div style={styles.controlBtn} onClick={this.saveEditing}>
+          Save
+        </div>
+        <div style={styles.controlBtn}>
+          Cancel
+        </div>
+      </div>
+    )
+  }
+  render () {
+    return (
+      <div style={styles.editContol}>
+        {this.renderChildern()}
+        {this.renderEditControl()}
+      </div>
+    )
   }
 }

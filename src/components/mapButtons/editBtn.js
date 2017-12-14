@@ -7,6 +7,10 @@ import { MapControl } from 'react-leaflet'
 export default class EditBtn extends MapControl {
   static contextTypes = {
     map: PropTypes.instanceOf(Map),
+    layerContainer: PropTypes.shape({
+      addLayer: PropTypes.func.isRequired,
+      removeLayer: PropTypes.func.isRequired
+    }),
   }
   constructor() {
     super()
@@ -34,9 +38,14 @@ export default class EditBtn extends MapControl {
     this.leafletElement = centerControl
   }
   onClick() {
-    const { map } = this.context
-    const { drawControl } = this.props
-    debugger
-    new L.EditToolbar.Edit(map, drawControl.options.edit).enable()
+    const { map, layerContainer } = this.context
+    const { drawControl, onEdit } = this.props
+    const guid = _.first(_.values(layerContainer._layers))
+    _.each(layerContainer._layers, (layer) => {
+      debugger
+      layer.options.editing || (layer.options.editing = {});
+      layer.editing.enable()
+    })
+    onEdit()
   }
 }
